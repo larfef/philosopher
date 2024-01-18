@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sleep.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:34 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/12 15:24:35 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:05:50 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosopher.h"
+#include "../inc/philosopher.h"
 
 size_t	get_ms_time(struct timeval *tv)
 {

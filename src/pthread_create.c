@@ -3,12 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   pthread_create.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:29:48 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/12 15:29:59 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:05:47 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philosopher.h"
-
+# include "../inc/philosopher.h"

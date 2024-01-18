@@ -1,36 +1,50 @@
 NAME	=	philo
-SRCS	=	ft_atoi.c main.c sleep.c
+SRCS	=	src/utils/atoi.c src/utils/bzero.c src/utils/calloc.c \
+			src/main.c src/utils/sleep.c
+INC		=	-I inc
+BIN		=	bin
 CFLAGS	=	-Wall -Wextra -Wextra -g
-OBJS	=	$(addprefix objs/, $(SRCS:.c=.o))
+ASAN	=	-fsanitize=address
+OBJS	=	$(addprefix $(BIN)/, $(notdir $(SRCS:.c=.o)))
+FLAGS_FILE = $(BIN)/.flags
+EXISTING_FLAGS := $(shell cat $(FLAGS_FILE) 2>/dev/null)
 
-all: $(NAME)
+all: check_flags $(NAME)
 
 $(NAME): $(OBJS)
-	gcc $(CFLAGS) $(OBJS) -o $(NAME)
-	@echo -e "Compilation successful"
+	cc $(CFLAGS) $(OBJS) -o $(NAME)
+	@echo "Compilation successful"
 
-objs/%.o: %.c | objs
-	gcc -c $< -o $@ $(CFLAGS)
+asan: CFLAGS += $(ASAN)
+asan: check_flags all
 
-objs:
-	mkdir -p objs
+check_flags: | $(BIN)
+	@if [ "$(CFLAGS)" != "$(EXISTING_FLAGS)" ]; then \
+		rm -f $(OBJS) $(NAME); \
+	fi
+	@echo "$(CFLAGS)" > $(FLAGS_FILE)
+
+$(BIN)/%.o: src/%.c | $(BIN)
+	@echo "$(CFLAGS)" > $(FLAGS_FILE)
+	cc $(CFLAGS) $(INC) -c $< -o $@
+
+$(BIN):
+	mkdir -p $(BIN)
 
 clean:
-	@if [ -e objs ]; then \
-		echo -e "\n__Cleaning objects"; \
-		echo -e "=> rm -rf objs\n"; \
-		/bin/rm -rf objs; \
-	else \
-		echo -e "\n No object files to clean"; \
+	@if [ -e $(BIN) ]; then \
+		echo "__Cleaning objects"; \
+		echo "=> rm -rf $(BIN)"; \
+		/bin/rm -rf $(BIN); \
 	fi
 
 fclean: clean
 	@if [ -e $(NAME) ]; then \
-		echo -e "\n__Cleaning executable"; \
-		echo -e "=> rm -f $(NAME)"; \
+		echo "__Cleaning executable"; \
+		echo "=> rm -f $(NAME)"; \
 		/bin/rm -f $(NAME); \
-	else \
-		echo -e " $(NAME) doesn't exist"; \
 	fi
 
 re: fclean all
+
+.PHONY: all clean fclean re

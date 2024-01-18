@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosopher.h"
+#include "../inc/philosopher.h"
 
 static	size_t	get_nbr(const char *str, int *ptr_j, size_t *ptr_k, size_t j)
 {
@@ -50,11 +50,11 @@ int	ft_atoi(const char *str)
 	if (i < 9223372036854775807 && k < 20)
 		return ((int) i * j);
 	if (i == 9223372036854775807 && j == -1)
-		return (1);
+		return (-1);
 	else if (i == 9223372036854775807 && j == 1)
 		return (-1);
 	else if (k >= 19 && j == -1)
-		return (0);
+		return (-1);
 	else
 		return (-1);
 }

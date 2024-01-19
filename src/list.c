@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:44:33 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/18 16:09:23 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/19 11:46:42 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,14 @@ void	lst_clear(int nb, t_thread *first)
 	free(temp);
 }
 
-void	lst_iter(int argc, char **argv, void (*function)(int, void *, void *),
-					t_thread *first)
+void		lst_iter(void (*function)(t_config *, t_thread *), t_config *data)
 {
 	t_thread	*temp;
 
-	temp = first;
+	temp = data->first;
 	while (temp != NULL)
 	{
-		function(argc, argv, temp);
+		function(data, temp);
 		temp = temp->next;
 	}
 }
@@ -67,10 +66,23 @@ t_thread	*lst_new(void)
 {
 	t_thread	*node;
 
-	node = ft_calloc(1, sizeof(*node));
+	node = _calloc(1, sizeof(*node));
 	if (node == NULL)
 		return (NULL);
 	node->previous = NULL;
 	node->next = NULL;
 	return (node);
 }
+
+// void	lst_iter(int argc, char **argv, void (*function)(int, void *, void *),
+// 					t_thread *first)
+// {
+// 	t_thread	*temp;
+
+// 	temp = first;
+// 	while (temp != NULL)
+// 	{
+// 		function(argc, argv, temp);
+// 		temp = temp->next;
+// 	}
+// }

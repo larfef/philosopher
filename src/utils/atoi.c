@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/philosopher.h"
+#include "../../inc/philosopher.h"
 
 static	size_t	get_nbr(const char *str, int *ptr_j, size_t *ptr_k, size_t j)
 {
@@ -39,7 +39,7 @@ static	size_t	get_nbr(const char *str, int *ptr_j, size_t *ptr_k, size_t j)
 	return (k);
 }
 
-int	ft_atoi(const char *str)
+int	_atoi(const char *str)
 {
 	size_t	i;
 	int		j;

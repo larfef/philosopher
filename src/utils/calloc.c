@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   calloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 13:03:51 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/18 16:04:42 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/19 09:48:38 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/philosopher.h"
+#include "../../inc/philosopher.h"
 
-void	*ft_calloc(size_t count, size_t size)
+void	*_calloc(size_t count, size_t size)
 {
 	void	*ptr;
 	size_t	range;
@@ -23,6 +23,6 @@ void	*ft_calloc(size_t count, size_t size)
 	ptr = (void *) malloc(size * count);
 	if (!ptr)
 		return (NULL);
-	ft_bzero(ptr, size * count);
+	_bzero(ptr, size * count);
 	return (ptr);
 }

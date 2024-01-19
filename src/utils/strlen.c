@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/05 18:45:59 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/05 18:45:59 by rkersten         ###   ########.fr       */
+/*   Created: 2024/01/05 18:49:34 by rkersten          #+#    #+#             */
+/*   Updated: 2024/01/05 18:49:34 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/philosopher.h"
 
-void	_bzero(void *s, size_t n)
+size_t	_strlen(const char *s)
 {
 	size_t	i;
 
 	i = 0;
-	while (i != n)
-	{
-		((unsigned char *)s)[i] = '\0';
+	while (s[i] != '\0')
 		i++;
-	}
+	return (i);
 }

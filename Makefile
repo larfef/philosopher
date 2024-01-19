@@ -1,9 +1,10 @@
 NAME	=	philo
 SRCS	=	src/utils/atoi.c src/utils/bzero.c src/utils/calloc.c \
-			src/main.c src/utils/sleep.c
+			src/main.c src/utils/sleep.c src/utils/free.c src/utils/strlen.c \
+			src/utils/strncmp.c src/init.c src/list.c src/parsing.c
 INC		=	-I inc
 BIN		=	bin
-CFLAGS	=	-Wall -Wextra -Wextra -g
+CFLAGS	=	-Wall -Wextra -Werror -g
 ASAN	=	-fsanitize=address
 OBJS	=	$(addprefix $(BIN)/, $(notdir $(SRCS:.c=.o)))
 FLAGS_FILE = $(BIN)/.flags
@@ -26,6 +27,9 @@ check_flags: | $(BIN)
 
 $(BIN)/%.o: src/%.c | $(BIN)
 	@echo "$(CFLAGS)" > $(FLAGS_FILE)
+	cc $(CFLAGS) $(INC) -c $< -o $@
+
+$(BIN)/%.o: src/utils/%.c | $(BIN)
 	cc $(CFLAGS) $(INC) -c $< -o $@
 
 $(BIN):

@@ -6,11 +6,11 @@
 /*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:34 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/18 16:05:50 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/19 08:36:21 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/philosopher.h"
+#include "../../inc/philosopher.h"
 
 size_t	get_ms_time(struct timeval *tv)
 {

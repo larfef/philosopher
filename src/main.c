@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:44 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/18 16:24:39 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/19 11:49:30 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,19 @@
 
 int	main(int argc, char **argv)
 {
-	t_config	*data;
+	t_config	data;
 
-	if (parse_argc_argv(argc, argv) == 1
-		|| init_config(argc, argv, &data) == 1)
+	if (parse_argc_argv(argc, argv) == 1)
 		return (1);
-	
-	if (data != NULL
-		&& init_threads_nb(argv[1], data) == 0)
-	{
-		free(data);
-		return (0);
-	}
+	init_config(argc, argv, &data);
+	init_list(&data);
+	if (data.ealloc == true)
+		return (1);
 	//free(data->threads);
 	//free(data);
 	//pthread_create(&thread, NULL, start_routine, &nb);
 	//sleep_us(3000000);
+	_free(NULL, &data);
+	lst_clear(data.nb, data.first);
 	return (0);
 }

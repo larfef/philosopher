@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:44:33 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/19 11:46:42 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:52:48 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,22 @@ void	lst_clear(int nb, t_thread *first)
 	free(temp);
 }
 
-void		lst_iter(void (*function)(t_config *, t_thread *), t_config *data)
+void	*lst_iter(void *(*function)(t_config *, t_thread *), t_config *data)
 {
+	int			pos;
+	void		*ret;
 	t_thread	*temp;
 
+	pos = 1;
 	temp = data->first;
 	while (temp != NULL)
 	{
-		function(data, temp);
+		ret = function(data, temp);
+		temp->pos = pos;
 		temp = temp->next;
+		pos++;
 	}
+	return (ret);
 }
 
 t_thread	*lst_last(t_thread *first)

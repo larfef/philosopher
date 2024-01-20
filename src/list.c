@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:44:33 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/19 15:52:48 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/20 10:43:56 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	lst_clear(int nb, t_thread *first)
 	free(temp);
 }
 
-void	*lst_iter(void *(*function)(t_config *, t_thread *), t_config *data)
+t_thread	*lst_iter(t_thread *(*function)(t_config *, t_thread *), t_config *data)
 {
 	int			pos;
 	void		*ret;
@@ -79,16 +79,3 @@ t_thread	*lst_new(void)
 	node->next = NULL;
 	return (node);
 }
-
-// void	lst_iter(int argc, char **argv, void (*function)(int, void *, void *),
-// 					t_thread *first)
-// {
-// 	t_thread	*temp;
-
-// 	temp = first;
-// 	while (temp != NULL)
-// 	{
-// 		function(argc, argv, temp);
-// 		temp = temp->next;
-// 	}
-// }

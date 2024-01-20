@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   list2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/12 15:24:44 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/20 10:46:02 by rkersten         ###   ########.fr       */
+/*   Created: 2024/01/20 09:27:34 by rkersten          #+#    #+#             */
+/*   Updated: 2024/01/20 09:34:36 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../inc/philosopher.h"
+#include "../inc/philosopher.h"
 
-int	main(int argc, char **argv)
+void	link_unlink_list(t_thread *first)
 {
-	t_config	data;
+	t_thread	*last;
 
-	if (parse_argc_argv(argc, argv) == 1
-		|| init_config(argc, argv, &data) == 1
-		|| init_list(&data) == 1
-		|| create_thread(&data) == 1)
-		return (1);
-	link_unlink_list(data.first);
-	_destroy(&data, lst_last(data.first));
-	_free(&data);
-	lst_clear(data.nb, data.first);
-	return (0);
+	last = lst_last(first);
+	if (first->previous == NULL
+		&& last->next == NULL)
+	{
+		first->previous = last;
+		last->next = first;
+	}
+	else if (first->previous == last
+		&& last->next == first)
+	{
+		first->previous = NULL;
+		last->next = NULL;
+	}
 }

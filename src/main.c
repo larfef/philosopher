@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:44 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/20 10:46:02 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:58:32 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ int	main(int argc, char **argv)
 		|| init_list(&data) == 1
 		|| create_thread(&data) == 1)
 		return (1);
-	link_unlink_list(data.first);
+	link_unlink_list(data.first, LINK);
+	create_thread(&data);
 	_destroy(&data, lst_last(data.first));
 	_free(&data);
-	lst_clear(data.nb, data.first);
+	lst_clear(data.first);
 	return (0);
 }

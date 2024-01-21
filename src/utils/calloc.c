@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 13:03:51 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/19 09:48:38 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:03:26 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ void	*_calloc(size_t count, size_t size)
 	ptr = (void *) malloc(size * count);
 	if (!ptr)
 		return (NULL);
-	_bzero(ptr, size * count);
+	memset(ptr, '\0', size * count);
 	return (ptr);
 }

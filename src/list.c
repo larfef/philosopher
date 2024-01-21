@@ -6,45 +6,66 @@
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:44:33 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/20 10:43:56 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:48:48 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philosopher.h"
 
-int	lstadd_back(t_thread *first)
+void	link_unlink_list(t_list *first, int mode)
 {
-	t_thread	*node;
-	t_thread	*temp;
+	t_list	*temp;
+
+	temp = first;
+	if (mode == LINK)
+	{
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = first;
+	}
+	else
+	{
+		while (--mode)
+			temp = temp->next;
+		temp->next = NULL;
+	}
+}
+
+int	lstadd_back(t_list *first)
+{
+	t_list	*node;
+	t_list	*temp;
 
 	node = lst_new();
 	if (node == NULL)
 		return (1);
-	temp = lst_last(first);
-	node->previous = temp;
+	temp = first;
+	while (temp->next != NULL)
+		temp = temp->next;
 	node->next = NULL;
 	temp->next = node;
 	return (0);
 }
 
-void	lst_clear(int nb, t_thread *first)
+void	lst_clear(t_list *first)
 {
-	t_thread	*temp;
+	t_list	*temp;
 
-	temp = first;
-	while (--nb)
+	temp = first->next;
+	while (temp != NULL)
 	{
+		free(first);
+		first = temp;
 		temp = temp->next;
-		free(temp->previous);
 	}
-	free(temp);
+	free(first);
 }
 
-t_thread	*lst_iter(t_thread *(*function)(t_config *, t_thread *), t_config *data)
+t_list	*lst_iter(t_list *(*function)(t_config *, t_list *), t_config *data)
 {
 	int			pos;
 	void		*ret;
-	t_thread	*temp;
+	t_list	*temp;
 
 	pos = 1;
 	temp = data->first;
@@ -58,24 +79,23 @@ t_thread	*lst_iter(t_thread *(*function)(t_config *, t_thread *), t_config *data
 	return (ret);
 }
 
-t_thread	*lst_last(t_thread *first)
+t_list	*lst_new(void)
 {
-	t_thread	*temp;
-
-	temp = first;
-	while (temp->next != NULL)
-		temp = temp->next;
-	return (temp);
-}
-
-t_thread	*lst_new(void)
-{
-	t_thread	*node;
+	t_list	*node;
 
 	node = _calloc(1, sizeof(*node));
 	if (node == NULL)
 		return (NULL);
-	node->previous = NULL;
 	node->next = NULL;
 	return (node);
 }
+
+// t_list	*lst_last(t_list *first)
+// {
+// 	t_list	*temp;
+
+// 	temp = first;
+// 	while (temp->next != NULL)
+// 		temp = temp->next;
+// 	return (temp);
+// }

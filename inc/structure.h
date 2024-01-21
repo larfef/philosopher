@@ -11,6 +11,7 @@ typedef struct t_list
 	bool			eat;
 	bool			sleep;
 	bool			think;
+	int				last_meal;
 	int				meals;//5
 	int				pos;
 	int				ret;
@@ -18,13 +19,13 @@ typedef struct t_list
 	pthread_mutex_t	mutex;
 	struct	timeval	current_time;
 	struct	t_list	*next;
-	struct	t_list	*previous;
-}	t_thread;
+}	t_list;
 
 typedef	struct t_struct
 {
 	bool			ealloc;
 	bool			is_dead;
+	bool			is_ret;
 	char			**argv;
 	int				argc;
 	int				nb;//1
@@ -45,7 +46,7 @@ typedef	struct t_struct
 typedef struct t_arg
 {
 	t_config	*config;
-	t_thread	*thread;
+	t_list		*thread;
 }	t_arg;
 
 #endif

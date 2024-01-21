@@ -6,13 +6,27 @@
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 22:33:36 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/20 22:38:42 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:24:30 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philosopher.h"
 
-void	eat_state(t_config *time, t_thread *thread)
+static	void	check_end_condition(t_config *time, t_list *thread)
+{
+	thread->ret = gettimeofday(&thread->current_time, NULL);
+	if (thread->ret)
+		return ;
+	if (get_time(&thread->current_time, MS)
+		- get_time(&time->start_time, MS) >= (size_t)time->die)
+		thread->state = DEAD;
+	if (thread->state == DEAD)
+		return (print_message(time, thread, MDIE));
+	if (thread->meals == 0)
+		thread->state = STOP;
+}
+
+static	void	eat_state(t_config *time, t_list *thread)
 {
 	if (thread->state == EAT && time->eat >= time->die)
 	{
@@ -20,45 +34,38 @@ void	eat_state(t_config *time, t_thread *thread)
 		if (thread->ret)
 			return ;
 		thread->state = DEAD;
-		return ;
+		return (print_message(time, thread, MDIE));
 	}
 	else if (thread->state == EAT && time->eat < time->die)
 	{
+		thread->last_meal = get_timestamp(&time->start_time, thread);
+		if (thread->ret == 0)
+			return ;
 		thread->ret = sleep_us(time->eat);
 		if (thread->ret)
 			return ;
+		if (time->argc == 6)
+			thread->meals--;
 		thread->state = SLEEP;
 		return ;
 	}
 }
 
-void	handle_state(t_config *data, t_thread *thread)
+static	void	sleep_state(t_config *time, t_list *thread)
 {
-	set_thread_state(thread);
-	if (thread->ret)
-		return ;
-	if (thread->state == EAT)
+	if (thread->state == SLEEP && time->sleep >= time->die)
 	{
-		print_message(data, thread, MEAT);
+		thread->ret = sleep_us(time->die);
 		if (thread->ret)
 			return ;
-		eat_state(data, thread);
-		if (thread->ret)
-			return ;
-		print_message(data, thread, MSLEEP);
-		if (thread->ret)
-			return ;
-		sleep_state(data, thread);
-		if (thread->ret)
-			return ;
-		print_message(data, thread, MTHINK);
-		if (thread->ret)
-			return ;
+		thread->state = DEAD;
+		print_message(time, thread, MDIE);
 	}
-	handle_state(data, thread);
+	else if (thread->state == SLEEP)
+		thread->ret = sleep_us(time->die);
 }
 
-void	set_thread_state(t_thread *thread)
+static	void	set_list_state(t_list *thread)
 {
 	thread->ret = pthread_mutex_lock(&thread->mutex);
 	if (thread->ret)
@@ -84,15 +91,31 @@ void	set_thread_state(t_thread *thread)
 		return ;
 }
 
-void	sleep_state(t_config *time, t_thread *thread)
+void	handle_state(t_config *data, t_list *thread)
 {
-	if (thread->state == SLEEP && time->sleep >= time->die)
+	check_end_condition(thread);
+	if (thread->ret || thread->state == STOP || thread->state == DEAD)
+		return ;
+	set_list_state(thread);
+	if (thread->ret)
+		return ;
+	if (thread->state == EAT)
 	{
-		thread->ret = sleep_us(time->die);
+		print_message(data, thread, MEAT);
 		if (thread->ret)
 			return ;
-		thread->state = DEAD;
+		eat_state(data, thread);
+		if (thread->ret)
+			return ;
+		print_message(data, thread, MSLEEP);
+		if (thread->ret)
+			return ;
+		sleep_state(data, thread);
+		if (thread->ret)
+			return ;
+		print_message(data, thread, MTHINK);
+		if (thread->ret)
+			return ;
 	}
-	else if (thread->state == SLEEP)
-		thread->ret = sleep_us(time->die);
+	handle_state(data, thread);
 }

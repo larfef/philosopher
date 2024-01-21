@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:25:53 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/20 22:08:58 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:12:54 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,17 @@ bool	print_error(t_config *data, char *str)
 	return (true);
 }
 
-void	print_message(t_config *data, t_thread *thread, char *str)
+void	print_message(t_config *data, t_list *thread, char *str)
 {
 	thread->ret = pthread_mutex_lock(&data->output);
 	if (thread->ret)
 		return ;
-	printf("%lu %d %s", get_timestamp(&data->start_time, &thread->current_time),
-			thread->pos, str);
+	if (data->is_dead == false)
+	{
+		printf("%lu %d %s", get_timestamp(&data->start_time, &thread->current_time),
+				thread->pos, str);
+		data->is_dead = true;
+	}
 	thread->ret = pthread_mutex_unlock(&data->output);
 	return ;
 }

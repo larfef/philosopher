@@ -3,7 +3,9 @@
 # define AVAILABLE 0
 # define DEAD 2
 # define EAT 1
+# define LINK 0
 # define SLEEP 2
+# define STOP 3
 # define ERROR 1
 # define TIME_MAX 60000
 # define THREAD_MAX 200
@@ -19,4 +21,7 @@
 # define MSLEEP "is sleeping\n"
 # define MTHINK "is thinking\n"
 # define USED 1
+# define US 1
+# define MS 1000
+# define S 1000000
 #endif

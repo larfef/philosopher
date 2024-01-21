@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:29:48 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/20 22:35:26 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:20:11 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,16 @@ int	set_error(t_config *data, int errnum)
 	return (ERROR);
 }
 
-void	stop_simulation(t_arg *data, int ret)
+void	stop_simulation(t_config *data, t_list *thread)
 {
-	pthread_mutex_lock(&data->config->stop_simulation);
-	data->config->ret = ret;
-	pthread_mutex_unlock(&data->config->stop_simulation);
+	if (pthread_mutex_lock(&data->stop_simulation) != 0)
+		return ;
+	if (data->is_ret == false)
+	{
+		data->ret = thread->ret;
+		data->is_ret = true;
+	}
+	pthread_mutex_unlock(&data->stop_simulation);
 }
 
 void	*start_simulation(t_arg *data)
@@ -32,8 +37,9 @@ void	*start_simulation(t_arg *data)
 	pthread_mutex_lock(&data->config->start_simulation);
 	ret = pthread_mutex_unlock(&data->config->start_simulation);
 	if (ret != 0)
-		stop_simulation(data, ret);
-	stop_simulation(data, handle_state(data));
+		stop_simulation(data->config, data->thread);
+	handle_state(data->config, data->thread);
+	stop_simulation(data->config, data->thread);
 }
 
 void	*start_routine(void *arg)
@@ -42,6 +48,7 @@ void	*start_routine(void *arg)
 	t_arg	*data;
 
 	data = (t_arg *)arg;
+	start_simulation(data);
 	// if (data->config->nb == 1
 	// 	&& (sleep_us((size_t)data->thread->die)))
 	// {
@@ -58,7 +65,7 @@ int	create_thread(t_config *data)
 {
 	int			i;
 	t_arg		arg;
-	t_thread	*temp;
+	t_list	*temp;
 
 	i = -1;
 	temp = data->first;

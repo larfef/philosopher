@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pthread_create.c                                   :+:      :+:    :+:   */
+/*   create_thread.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:29:48 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/21 12:20:11 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 21:58:42 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,33 @@ void	stop_simulation(t_config *data, t_list *thread)
 		return ;
 	if (data->is_ret == false)
 	{
+		if (thread->state == DEAD)
+			data->is_dead = true;
 		data->ret = thread->ret;
 		data->is_ret = true;
 	}
 	pthread_mutex_unlock(&data->stop_simulation);
 }
 
-void	*start_simulation(t_arg *data)
+void	start_simulation(t_config *data, t_list *thread)
 {
-	int	ret;
+	thread->ret = pthread_mutex_lock(&data->start_simulation);
+	if (thread->ret)
+		stop_simulation(data, thread);
+	thread->ret = pthread_mutex_unlock(&data->start_simulation);
+	if (thread->ret)
+		stop_simulation(data, thread);
+}
 
-	pthread_mutex_lock(&data->config->start_simulation);
-	ret = pthread_mutex_unlock(&data->config->start_simulation);
-	if (ret != 0)
-		stop_simulation(data->config, data->thread);
-	handle_state(data->config, data->thread);
-	stop_simulation(data->config, data->thread);
+void	one_thread(t_config *time, t_list *thread)
+{
+	print_message(time, thread, MTHINK);
+	if (thread->ret)
+		return ;
+	sleep_us(time->die);
+	if (thread->ret)
+		return ;
+	print_message(time, thread, MDIE);
 }
 
 void	*start_routine(void *arg)
@@ -48,7 +59,15 @@ void	*start_routine(void *arg)
 	t_arg	*data;
 
 	data = (t_arg *)arg;
-	start_simulation(data);
+	
+	start_simulation(data->config, data->thread);
+	if (data->thread->ret)
+		return (NULL);
+	if (data->config->nb > 1)
+		multiple_thread(data->config, data->thread);
+	else
+		one_thread(data->config, data->thread);
+	stop_simulation(data->config, data->thread);
 	// if (data->config->nb == 1
 	// 	&& (sleep_us((size_t)data->thread->die)))
 	// {
@@ -59,6 +78,19 @@ void	*start_routine(void *arg)
 	// if (data->config->argc == 6)
 	// 	if (data->thread->meals != 0)
 	// 		data->thread->meals--;
+}
+
+int	_wait(t_config *data)
+{
+	int	i;
+
+	i = 0;
+	while (i != data->nb)
+	{
+		pthread_join(data->threads[i], NULL);
+		i++;
+	}
+	return (data->ret);
 }
 
 int	create_thread(t_config *data)
@@ -84,26 +116,3 @@ int	create_thread(t_config *data)
 	return (_wait(data));
 }
 
-int	_wait(t_config *data)
-{
-	int	ret;
-
-	while (1)
-	{
-		ret = pthread_mutex_lock(&data->stop_simulation);
-		if (ret != 0)
-			return (ret);
-		if (data->ret == 0)
-		{
-			ret = pthread_mutex_unlock(&data->stop_simulation);
-			if (ret != 0)
-				return (ret);	
-		}
-		else
-			break;
-	}
-	ret = pthread_mutex_unlock(&data->stop_simulation);
-	if (ret != 0)
-		return (ret);
-	return (data->ret);
-}

@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 22:33:36 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/21 12:59:58 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 21:53:02 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 
 static	void	check_end_condition(t_config *time, t_list *thread)
 {
+	thread->ret = pthread_mutex_lock(&time->stop_simulation);
+	if (thread->ret)
+		return ;
+	if (time->is_dead == true)
+	{
+		thread->state = STOP;
+		thread->ret = pthread_mutex_unlock(&time->stop_simulation);
+		return ;
+	}
 	thread->ret = gettimeofday(&thread->current_time, NULL);
 	if (thread->ret)
 		return ;
@@ -65,7 +74,7 @@ static	void	sleep_state(t_config *time, t_list *thread)
 		thread->ret = sleep_us(time->die);
 }
 
-static	void	set_list_state(t_list *thread)
+static	void	set_thread_state(t_list *thread)
 {
 	thread->ret = pthread_mutex_lock(&thread->mutex);
 	if (thread->ret)
@@ -91,12 +100,12 @@ static	void	set_list_state(t_list *thread)
 		return ;
 }
 
-void	handle_state(t_config *data, t_list *thread)
+void	multiple_thread(t_config *data, t_list *thread)
 {
 	check_end_condition(data, thread);
 	if (thread->ret || thread->state == STOP || thread->state == DEAD)
 		return ;
-	set_list_state(thread);
+	set_thread_state(thread);
 	if (thread->ret)
 		return ;
 	if (thread->state == EAT)
@@ -117,5 +126,5 @@ void	handle_state(t_config *data, t_list *thread)
 		if (thread->ret)
 			return ;
 	}
-	handle_state(data, thread);
+	multiple_thread(data, thread);
 }

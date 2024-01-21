@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:54 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/21 12:49:25 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 21:29:29 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void		_destroy(t_config *data, t_list *thread);
 bool		_free(t_config *data);
 size_t		get_timestamp(struct timeval *start_time, t_list *thread);
 size_t		get_time(struct timeval *tv, int unit);
-void		handle_state(t_config *data, t_list *thread);
+void		multiple_thread(t_config *data, t_list *thread);
 int			init_config(int	argc, char **argv, t_config *data);
 int			init_list(t_config *data);
 void		link_unlink_list(t_list *first, int mode);

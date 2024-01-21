@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   thread_state.c                                     :+:      :+:    :+:   */
+/*   handle_state.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 22:33:36 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/21 12:24:30 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:59:58 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static	void	set_list_state(t_list *thread)
 
 void	handle_state(t_config *data, t_list *thread)
 {
-	check_end_condition(thread);
+	check_end_condition(data, thread);
 	if (thread->ret || thread->state == STOP || thread->state == DEAD)
 		return ;
 	set_list_state(thread);

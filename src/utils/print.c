@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:25:53 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/21 12:12:54 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:03:31 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	print_message(t_config *data, t_list *thread, char *str)
 		return ;
 	if (data->is_dead == false)
 	{
-		printf("%lu %d %s", get_timestamp(&data->start_time, &thread->current_time),
+		printf("%lu %d %s", get_timestamp(&data->start_time, thread),
 				thread->pos, str);
 		data->is_dead = true;
 	}

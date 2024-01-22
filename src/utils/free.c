@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 08:35:33 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/21 12:32:33 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:20:28 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ void	_destroy(t_config *data, t_list *thread)
 	}
 }
 
-bool	_free(t_config *data)
+bool	_free(t_config *data, char *str)
 {
 	if (data->threads != NULL)
 		free(data->threads);
-	return (print_error(data, EALLOC));
+	if (str != NULL)
+		return (print_error(data, EALLOC));
+	return (false);
 }

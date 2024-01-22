@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:54 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/21 21:29:29 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 10:28:12 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,14 @@ void		_bzero(void *s, size_t n);
 void		*_calloc(size_t count, size_t size);
 int			create_thread(t_config *data);
 void		_destroy(t_config *data, t_list *thread);
-bool		_free(t_config *data);
+bool		_free(t_config *data, char *str);
 size_t		get_timestamp(struct timeval *start_time, t_list *thread);
 size_t		get_time(struct timeval *tv, int unit);
 void		multiple_thread(t_config *data, t_list *thread);
 int			init_config(int	argc, char **argv, t_config *data);
 int			init_list(t_config *data);
 void		link_unlink_list(t_list *first, int mode);
+void		lock_mutex(t_list *thread);
 int			lstadd_back(t_list *first);
 void		lst_clear(t_list *first);
 t_list		*lst_iter(t_list *(*function)(t_config *, t_list *),
@@ -49,5 +50,6 @@ bool		print_error(t_config *data, char *str);
 bool		sleep_us(size_t duration);
 size_t		_strlen(const char *s);
 int			_strncmp(const char *s1, const char *s2, size_t n);
+void		unlock_mutex(t_list *thread);
 
 #endif

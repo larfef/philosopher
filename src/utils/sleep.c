@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sleep.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:34 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/21 12:12:37 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:04:07 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ size_t	get_timestamp(struct timeval *start_time, t_list *thread)
 
 size_t	get_time(struct timeval *tv, int unit)
 {
-	size_t	time;
-
 	return (((tv->tv_sec * 1000000) + tv->tv_usec) / unit);
 }
 

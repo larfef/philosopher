@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:36:10 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/21 12:50:00 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:21:03 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	init_config(int	argc, char **argv, t_config *data)
 	data->nb = _atoi(argv[1]);
 	data->threads = _calloc(data->nb, sizeof(*data->threads));
 	if (data->threads == NULL)
-		return (_free(data));
+		return (_free(data, EALLOC));
 	data->argc = argc;
 	data->argv = argv;
 	data->die = _atoi(argv[2]);
@@ -49,14 +49,14 @@ int	init_list(t_config *data)
 	
 	data->first = lst_new();
 	if (data->first == NULL)
-		return (_free(data));
+		return (_free(data, EALLOC));
 	i = 0;
 	while (++i < data->nb)
 	{
 		if (lstadd_back(data->first) == 1)
 		{
 			lst_clear(data->first);
-			return (_free(data));
+			return (_free(data, EALLOC));
 		}
 	}
 	ptr = lst_iter(init_node, data);

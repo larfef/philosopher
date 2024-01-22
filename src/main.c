@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:44 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/22 12:51:25 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 15:52:25 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(int argc, char **argv)
 		one_thread(&data);
 	else
 		create_thread(&data);
-	link_unlink_list(data.first, 1);
+	link_unlink_list(data.first, data.nb);
 	_destroy(&data, data.first);
 	_free(&data, NULL);
 	lst_clear(data.first);

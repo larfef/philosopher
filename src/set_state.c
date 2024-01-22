@@ -3,54 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   set_state.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:24:59 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/22 11:07:07 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 20:22:43 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/philosopher.h"
 
-void	set_eat_state(t_list *thread)
+void	eat_state(t_config *time, t_list *thread)
 {
-	thread->ret = pthread_mutex_lock(&thread->mutex);
-	if (thread->ret)
-		return ;
-	if (thread->mutex_lock == false)
-		thread->ret = pthread_mutex_lock(&thread->next->mutex);
-	if (thread->ret)
-		thread->ret = pthread_mutex_unlock(&thread->mutex);
-	if (thread->ret)
-		return ;
-	if (thread->mutex_lock == false
-		&& thread->next->mutex_lock == false)
+	if (time->eat >= time->die)
 	{
-		thread->mutex_lock = true;
-		thread->next->mutex_lock = true;
-		thread->state = EAT;
+		thread->ret = sleep_us(time->die);
+		if (thread->ret)
+			return ;
+		thread->state = DEAD;
+		return (print_message(time, thread, MDIE));
 	}
-	thread->ret = pthread_mutex_unlock(&thread->mutex);
-	if (thread->ret)
+	if (time->eat < time->die)
+	{
+		thread->last_meal = get_timestamp(&time->start_time, thread);
+		if (thread->ret)
+			return ;
+		thread->ret = sleep_us(time->eat);
+		if (thread->ret)
+			return ;
+		if (time->argc == 6)
+			thread->meals--;
 		return ;
-	thread->ret = pthread_mutex_unlock(&thread->next->mutex);
+	}
 }
 
-void	unset_eat_state(t_list *thread)
+void	sleep_state(t_config *time, t_list *thread)
 {
-	thread->ret = pthread_mutex_lock(&thread->mutex);
+	if (thread->state == SLEEP && time->sleep >= time->die)
+	{
+		thread->ret = sleep_us(time->die);
+		if (thread->ret)
+			return ;
+		thread->state = DEAD;
+		print_message(time, thread, MDIE);
+	}
+	else if (thread->state == SLEEP)
+		thread->ret = sleep_us(time->sleep);
+}
+
+void	lock_mutex(t_config *data, t_list *thread)
+{
+	pthread_mutex_t	*first_mutex;
+	pthread_mutex_t	*second_mutex;
+	
+	if (thread->pos % 2 == 0)
+	{
+		first_mutex = &thread->mutex;
+		second_mutex = &thread->next->mutex;
+	}
+	else
+	{
+		sleep_us(100000);
+		first_mutex = &thread->next->mutex;
+		second_mutex = &thread->mutex;
+	}
+	thread->ret = pthread_mutex_lock(first_mutex);
 	if (thread->ret)
 		return ;
-	thread->ret = pthread_mutex_lock(&thread->next->mutex);
+	thread->ret = pthread_mutex_lock(second_mutex);
 	if (thread->ret)
-		thread->ret = pthread_mutex_unlock(&thread->mutex);
+		thread->ret = pthread_mutex_unlock(first_mutex);
 	if (thread->ret)
 		return ;
-	thread->mutex_lock = false;
-	thread->next->mutex_lock = false;
+	print_message(data, thread, MEAT);
+	if (thread->ret)
+		return ;
+	eat_state(data, thread);
+	thread->ret = pthread_mutex_unlock(second_mutex);
+	if (thread->ret)
+		return ;
+	thread->ret = pthread_mutex_unlock(first_mutex);
 	thread->state = SLEEP;
-	thread->ret = pthread_mutex_unlock(&thread->mutex);
-	if (thread->ret)
-		return ;
-	thread->ret = pthread_mutex_unlock(&thread->next->mutex);
 }

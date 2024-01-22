@@ -16,6 +16,7 @@ typedef struct t_list
 	int				pos;
 	int				ret;
 	int				state;
+//	pthread_mutex_t	no_deadlock;
 	pthread_mutex_t	mutex;
 	struct	timeval	current_time;
 	struct	t_list	*next;

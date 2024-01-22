@@ -1,7 +1,7 @@
 #ifndef CONSTANT_H
 # define CONSTANT_H
 # define AVAILABLE 0
-# define DEAD 2
+# define DEAD 4
 # define EAT 1
 # define LINK 0
 # define SLEEP 2

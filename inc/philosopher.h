@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.campus19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:54 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/22 12:51:12 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 17:43:55 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void		_bzero(void *s, size_t n);
 void		*_calloc(size_t count, size_t size);
 int			create_thread(t_config *data);
 void		_destroy(t_config *data, t_list *thread);
+void		eat_state(t_config *data, t_list *thread);
 bool		_free(t_config *data, char *str);
 size_t		get_timestamp(struct timeval *start_time, t_list *thread);
 size_t		get_time(struct timeval *tv, int unit);
@@ -48,8 +49,10 @@ void		one_thread(t_config *data);
 int			parse_argc_argv(int argc, char **argv);
 void		print_message(t_config *data, t_list *thread, char *str);
 bool		print_error(t_config *data, char *str);
-void		set_eat_state(t_list *thread);
+void		lock_mutex(t_config *data, t_list *thread);
+void		sleep_state(t_config *time, t_list *thread);
 bool		sleep_us(size_t duration);
+void		stop_simulation(t_config *data, t_list *thread);
 size_t		_strlen(const char *s);
 int			_strncmp(const char *s1, const char *s2, size_t n);
 void		unset_eat_state(t_list *thread);

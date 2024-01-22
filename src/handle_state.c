@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 22:33:36 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/22 10:29:43 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 13:30:24 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,9 @@ static	void	check_end_condition(t_config *time, t_list *thread)
 	if (thread->ret)
 		return ;
 	if (time->is_dead == true)
-	{
 		thread->state = STOP;
-		thread->ret = pthread_mutex_unlock(&time->stop_simulation);
-		return ;
-	}
 	thread->ret = pthread_mutex_unlock(&time->stop_simulation);
-	if (thread->ret)
+	if (thread->state == STOP || thread->ret)
 		return ;	
 	thread->ret = gettimeofday(&thread->current_time, NULL);
 	if (thread->ret)
@@ -42,9 +38,6 @@ static	void	exec_time_to_low(t_config *time, t_list *thread)
 {
 	if (thread->state == EAT && time->eat >= time->die)
 	{
-		print_message(time, thread, MEAT);
-		if (thread->ret)
-			return ;
 		thread->ret = sleep_us(time->die);
 		if (thread->ret)
 			return ;
@@ -59,12 +52,12 @@ static	void	eat_state(t_config *time, t_list *thread)
 	if (thread->state == EAT && time->eat < time->die)
 	{
 		thread->last_meal = get_timestamp(&time->start_time, thread);
-		if (thread->ret == 0)
+		if (thread->ret)
 			return ;
 		thread->ret = sleep_us(time->eat);
 		if (thread->ret)
 			return ;
-		unlock_mutex(thread);
+		unset_eat_state(thread);
 		if (thread->ret)
 			return ;
 		if (time->argc == 6)
@@ -92,26 +85,25 @@ void	multiple_thread(t_config *data, t_list *thread)
 	check_end_condition(data, thread);
 	if (thread->ret || thread->state == STOP || thread->state == DEAD)
 		return ;
-	lock_mutex(thread);
+	set_eat_state(thread);
 	if (thread->ret)
 		return ;
 	if (thread->state == EAT)
 	{
-		// print_message(data, thread, MEAT);
-		// if (thread->ret)
-		// 	return ;
+		print_message(data, thread, MEAT);
+		if (thread->ret)
+			return ;
 		eat_state(data, thread);
 		if (thread->ret)
 			return ;
-		// print_message(data, thread, MSLEEP);
-		// if (thread->ret)
-		// 	return ;
+		print_message(data, thread, MSLEEP);
+		if (thread->ret)
+			return ;
 		sleep_state(data, thread);
 		if (thread->ret)
 			return ;
-		// print_message(data, thread, MTHINK);
-		// if (thread->ret)
-		// 	return ;
+		print_message(data, thread, MTHINK);
+		if (thread->ret)
+			return ;
 	}
-	multiple_thread(data, thread);
 }

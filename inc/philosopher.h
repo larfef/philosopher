@@ -6,7 +6,7 @@
 /*   By: rkersten <rkersten@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:54 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/22 10:28:12 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 12:51:12 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,21 @@ void		multiple_thread(t_config *data, t_list *thread);
 int			init_config(int	argc, char **argv, t_config *data);
 int			init_list(t_config *data);
 void		link_unlink_list(t_list *first, int mode);
-void		lock_mutex(t_list *thread);
+void		set_thread_state(t_list *thread);
 int			lstadd_back(t_list *first);
 void		lst_clear(t_list *first);
 t_list		*lst_iter(t_list *(*function)(t_config *, t_list *),
 						t_config *data);
 t_list		*lst_last(t_list *first);
 t_list		*lst_new(void);
+void		one_thread(t_config *data);
 int			parse_argc_argv(int argc, char **argv);
 void		print_message(t_config *data, t_list *thread, char *str);
 bool		print_error(t_config *data, char *str);
+void		set_eat_state(t_list *thread);
 bool		sleep_us(size_t duration);
 size_t		_strlen(const char *s);
 int			_strncmp(const char *s1, const char *s2, size_t n);
-void		unlock_mutex(t_list *thread);
+void		unset_eat_state(t_list *thread);
 
 #endif

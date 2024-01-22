@@ -1,7 +1,8 @@
 NAME	=	philo
 SRCS	=	src/utils/atoi.c src/utils/calloc.c src/utils/free.c src/utils/print.c \
 			src/utils/sleep.c src/utils/strlen.c src/utils/strncmp.c \
-			src/create_thread.c src/handle_state.c src/init.c src/list.c src/main.c src/parsing.c
+			src/create_thread.c src/handle_state.c src/init.c src/list.c \
+			src/main.c src/parsing.c src/set_state.c
 INC		=	-I inc
 BIN		=	bin
 CFLAGS	=	-Wall -Wextra -Werror -g

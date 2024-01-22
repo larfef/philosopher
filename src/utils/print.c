@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:25:53 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/22 09:03:31 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 11:34:47 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	print_message(t_config *data, t_list *thread, char *str)
 	{
 		printf("%lu %d %s", get_timestamp(&data->start_time, thread),
 				thread->pos, str);
-		data->is_dead = true;
+		if (thread->state == DEAD)
+			data->is_dead = true;
 	}
 	thread->ret = pthread_mutex_unlock(&data->output);
 	return ;

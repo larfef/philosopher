@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sleep.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rkersten <rkersten@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rkersten <rkersten@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 15:24:34 by rkersten          #+#    #+#             */
-/*   Updated: 2024/01/22 09:04:07 by rkersten         ###   ########.fr       */
+/*   Updated: 2024/01/22 11:28:46 by rkersten         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ bool	sleep_us(size_t duration)
 	if (gettimeofday(&tv_start, NULL) != 0
 		|| gettimeofday(&tv_end_sleep, NULL) != 0)
 		return (true);
-	while (get_time(&tv_end_sleep, US) - get_time(&tv_start, US) != duration)
+	while (get_time(&tv_end_sleep, US) - get_time(&tv_start, US) != duration * MS)
+	{
 		if (gettimeofday(&tv_end_sleep, NULL) != 0)
 			return (true);
+	}
 	return (false);
 }
